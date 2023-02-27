@@ -21,18 +21,6 @@ class depthmapper:
         elif destination.split(".")[-1] != "bmp":
             raise Exception("Must use .bmp for extension")
 
-def max_min_val(inputlist):
-    """Returns max value from all values in a list of lists
-    
-    Args:
-        inputlist: list of lists
-        
-    Returns:
-        maxvalue: maximum value out of entire inputlist"""
-    maxvalue = max([sublist[-1] for sublist in inputlist])
-    minvalue = min([sublist[-1] for sublist in inputlist])
-    return maxvalue, minvalue
-
 def main(self):
     """Takes in a Studio Camera Depth File and saves the depth map as a .bmp
     
@@ -64,24 +52,29 @@ def main(self):
         img.append(row)
     f.close()
 
-    max, min = max_min_val(img)
+    max = np.max(img)
+    min = np.min(img)
     print(f"Max pixel value: {max}")
     print(f"Min pixel value: {min}")
 
-    scaled_img = []
-
-    for row in img:
-        r = []
-        for val in row:
-            val = (val*255)/max
-            r.append(val)
-        scaled_img.append(r)
-
-    scaled_max, scaled_min = max_min_val(scaled_img)
-    print(f"Scaled Max pixel value: {scaled_max}")
-    print(f"Scaled Min pixel value: {scaled_min}")
-
     npimg = np.array(img)
+
+    def ordered_response(npimg):
+        # do stuff
+        return y
+    
+    def nosm(npimg):
+        # do stuff
+        return x
+
+    
+
+    d = np.abs(npimg - np.median(npimg))
+    mdev = np.median(d)
+    s = d/mdev if mdev else np.zero(len(d))
+
+    newimg = npimg[s<2.0]
+
 
     result = Image.fromarray((npimg).astype(np.uint8))
 
